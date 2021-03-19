@@ -23,3 +23,6 @@ def transform_xml(xml: bytes) -> str:
         result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node=node)
         
         return result
+
+if __name__ == "__main__":
+    app.run()
