@@ -6,7 +6,7 @@
 2. activate your virtual environemnt `source env/bin/activate`
 3. Install requirements `pip install -r requirements.txt`
 4. Export flask env variable `export FLASK_APP=app.py`
-5. Run flask API `flask run`
+5. Run flask API `flask run` or `python app.py`
 6. Check console for no errors.
 7. Call the api 2 times using 
 ```
