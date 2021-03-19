@@ -3,11 +3,12 @@
 ## How to use this repo
 
 1. Make venv `python3 -m venv env`
-2. Install requirements `pip install -r requirements.txt`
-3. Export flask env variable `export FLASK_APP=app.py`
-4. Run flask API `flask run`
-5. Check console for no errors.
-6. Call the api 2 times using 
+2. activate your virtual environemnt `source env/bin/activate`
+3. Install requirements `pip install -r requirements.txt`
+4. Export flask env variable `export FLASK_APP=app.py`
+5. Run flask API `flask run`
+6. Check console for no errors.
+7. Call the api 2 times using 
 ```
 curl --request POST \
   --url http://127.0.0.1:5000/transform \
