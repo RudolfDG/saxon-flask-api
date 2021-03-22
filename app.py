@@ -12,17 +12,18 @@ def transform():
     return result
 
 def transform_xml(xml: bytes) -> str:
-    with saxonc.PySaxonProcessor(license=False) as proc:
-        base_dir = os.getcwd()
-        xslt_path = os.path.join(base_dir, "test.xslt")
+    proc = saxonc.PySaxonProcessor(license=False)
+    
+    base_dir = os.getcwd()
+    xslt_path = os.path.join(base_dir, "test.xslt")
 
-        xslt_proc = proc.new_xslt30_processor()
+    xslt_proc = proc.new_xslt30_processor()
 
-        node = proc.parse_xml(xml_text=xml.decode("utf-8"))
+    node = proc.parse_xml(xml_text=xml.decode("utf-8"))
 
-        result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node=node)
-        
-        return result
+    result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node=node)
+    
+    return result
 
 if __name__ == "__main__":
     app.run()
