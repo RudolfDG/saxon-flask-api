@@ -5,43 +5,31 @@
 1. Make venv `python3 -m venv env`
 2. activate your virtual environemnt `source env/bin/activate`
 3. Install requirements `pip install -r requirements.txt`
-4. Export flask env variable `export FLASK_APP=app.py`
-5. Run flask API `flask run` or `python app.py`
+5. Run uwsgi server `uwsgi -i uwsgi.ini`
 6. Check console for no errors.
-7. Call the api 2 times using 
-```
-curl --request POST \
-  --url http://127.0.0.1:5000/transform \
-  --header 'Content-Type: application/xml' \
-  --data '<?xml version="1.0"?>
-<Article>
-  <Title>My Article</Title>
-  <Authors>
-    <Author>Mr. Foo</Author>
-    <Author>Mr. Bar</Author>
-  </Authors>
-  <Body>This is my article text.</Body>
-</Article>'
-```
+7. Run the stresstest `python stresstest.py` in a second terminal.
 
-Example XSLT and XML are from https://developer.mozilla.org/en-US/docs/Web/API/XSLTProcessor/Basic_Example
-
-The first call should succeed and return 
-```
-Article - My Article Authors: - Mr. Foo - Mr. Bar
-```
-
-The second one should fail and in the Flask logging you should see
+After the stresstest completes (20k calls to the local api) go check the logs of the uwsgi server. It should look something like this:
 
 ```
- * Serving Flask app "app.py"
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: off
- * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-127.0.0.1 - - [19/Mar/2021 11:58:43] "POST /transform HTTP/1.1" 308 -
-127.0.0.1 - - [19/Mar/2021 11:58:43] "POST /transform/ HTTP/1.0" 200 -
-127.0.0.1 - - [19/Mar/2021 11:58:45] "POST /transform HTTP/1.1" 308 -
-JNI_CreateJavaVM() failed with result: -5
+JET RUNTIME HAS DETECTED UNRECOVERABLE ERROR: runtime error
+mmap() failed (errno=ENOMEM).
+It may be related to exceeding process's maximum number of memory mappings
+Please try to adjust VM params by setting the following VM options:
+  export JETVMPROP="-Djet.gc.defrag.holes.threshold=60815 -Djet.gc.force.defrag.to.lower.address" 
+
+If this doesn't help, please try to increase the limit of memory mappings by running the following command in terminal as root:
+
+  sysctl -w vm.max_map_count=131060
+
+(default value is most likely around 65530).
+Please note that this setting is not persistent and will be reseted to default after reboot
+If it helps, you can make it persistent by adding 'vm.max_map_count=131060' line to /etc/sysctl.conf
+
+Please, contact the vendor of the application.
+Core dump will be piped to "/usr/share/apport/apport %p %s %c %d %P %E"
+Extra information about error is saved in the "jet_err_223170.txt" file.
+
+DAMN ! worker 1 (pid: 223170) died, killed by signal 6 :( trying respawn ...
+Respawned uWSGI worker 1 (new pid: 224389)
 ```
